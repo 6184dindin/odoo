@@ -8,7 +8,7 @@ class TestModel(models.Model):
     _description = 'Test Model'
 
     name = fields.Char()
-    value = fields.Integer()
+    value = fields.Integer(groups='real_estate.group_manager')
     value2 = fields.Float(compute="_value_pc", store=True)
     description = fields.Text()
     age = fields.Integer()

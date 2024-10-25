@@ -1,0 +1,84 @@
+<odoo>
+    <data>
+        <record model="ir.module.category" id="module_category_real_estate">
+            <field name="name">Real Estate</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record model="res.groups" id="group_user">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_real_estate"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record model="res.groups" id="group_manager">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_category_real_estate"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="test_model_access_user" model="ir.model.access">
+            <field name="name">test.model.access.user</field>
+            <field name="model_id" ref="model_test_model"/>
+            <field name="group_id" ref="group_user"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="test_model_access_manager" model="ir.model.access">
+            <field name="name">test.model.access.manager</field>
+            <field name="model_id" ref="model_test_model"/>
+            <field name="group_id" ref="group_manager"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="estate_property_access_user" model="ir.model.access">
+            <field name="name">estate.property.access.user</field>
+            <field name="model_id" ref="model_estate_property"/>
+            <field name="group_id" ref="group_user"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="estate_property_access_manager" model="ir.model.access">
+            <field name="name">estate.property.access.manager</field>
+            <field name="model_id" ref="model_estate_property"/>
+            <field name="group_id" ref="group_manager"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+    </data>
+
+    <data>
+        <record id="rule_admin_with_user" model="ir.rule">
+            <field name="name">Rule admin test model with user</field>
+            <field name="model_id" ref="model_test_model"/>
+            <field name="domain_force">[('name', '!=', 'admin')]</field>
+            <field name="perm_read" eval="True"/> <!-- False: if name = admin, manager can read; True: if name = admin, manager can't read -->
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="groups" eval="[(4, ref('group_user'))]"/>
+        </record>
+
+        <record id="rule_admin_with_manager" model="ir.rule">
+            <field name="name">Rule admin test model with manager</field>
+            <field name="model_id" ref="model_test_model"/>
+            <field name="domain_force">[('name', '!=', 'admin')]</field>
+            <field name="perm_read" eval="False"/> <!-- False: if name = admin, manager can read; True: if name = admin, manager can't read -->
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="groups" eval="[(4, ref('group_manager'))]"/>
+        </record>
+    </data>
+</odoo>
